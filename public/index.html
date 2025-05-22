@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Validador de Cédula Dominicana</title>
+</head>
+<body>
+  <h1>Validador de Cédula Dominicana</h1>
+
+  <input type="text" id="cedula" placeholder="Ingresa tu cédula" />
+  <button onclick="validarCedula()">Validar</button>
+
+  <p id="resultado"></p>
+
+  <script>
+    async function validarCedula() {
+      const cedula = document.getElementById('cedula').value;
+      const resultado = document.getElementById('resultado');
+
+      try {
+        const res = await fetch('/api/validar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cedula })
+        });
+
+        const data = await res.json();
+        resultado.textContent = data.mensaje;
+        resultado.style.color = data.valido ? 'green' : 'red';
+      } catch (err) {
+        resultado.textContent = 'Error al validar.';
+        resultado.style.color = 'orange';
+      }
+    }
+  </script>
+</body>
+</html>
