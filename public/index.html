@@ -2,20 +2,302 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Validador de Cédula Dominicana</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+    }
+
+    .header {
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    h1 {
+      color: #2d3748;
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #718096;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .form-group {
+      margin-bottom: 30px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      color: #4a5568;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .input-container {
+      position: relative;
+    }
+
+    #cedula {
+      width: 100%;
+      padding: 16px 20px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 16px;
+      color: #2d3748;
+      background: #f8fafc;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    #cedula:focus {
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    #cedula::placeholder {
+      color: #a0aec0;
+    }
+
+    .btn-validate {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    .btn-validate:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-validate:active {
+      transform: translateY(0);
+    }
+
+    .btn-validate:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .result-container {
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #resultado {
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      margin: 0;
+      transition: all 0.3s ease;
+      display: none;
+    }
+
+    .result-success {
+      background: #f0fff4;
+      color: #22543d;
+      border: 2px solid #9ae6b4;
+      display: block !important;
+    }
+
+    .result-error {
+      background: #fff5f5;
+      color: #742a2a;
+      border: 2px solid #feb2b2;
+      display: block !important;
+    }
+
+    .result-warning {
+      background: #fffbeb;
+      color: #92400e;
+      border: 2px solid #fbbf24;
+      display: block !important;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s ease-in-out infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .info-section {
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .info-title {
+      color: #4a5568;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .info-text {
+      color: #718096;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+        margin: 10px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .logo {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Validador de Cédula Dominicana</h1>
+  <div class="container">
+    <div class="header">
+      <div class="logo">ID</div>
+      <h1>Validador de Cédula</h1>
+      <p class="subtitle">República Dominicana</p>
+    </div>
 
-  <input type="text" id="cedula" placeholder="Ingresa tu cédula" />
-  <button onclick="validarCedula()">Validar</button>
+    <div class="form-group">
+      <label for="cedula">Número de Cédula</label>
+      <div class="input-container">
+        <input 
+          type="text" 
+          id="cedula" 
+          placeholder="000-0000000-0" 
+          maxlength="13"
+        />
+      </div>
+    </div>
 
-  <p id="resultado"></p>
+    <button class="btn-validate" onclick="validarCedula()">
+      <span id="btn-text">Validar Cédula</span>
+    </button>
+
+    <div class="result-container">
+      <p id="resultado"></p>
+    </div>
+
+    <div class="info-section">
+      <div class="info-title">Información</div>
+      <div class="info-text">
+        Ingrese el número de cédula en el formato correcto (000-0000000-0) para verificar su validez según el algoritmo oficial de la República Dominicana.
+      </div>
+    </div>
+  </div>
 
   <script>
+    // Formatear input mientras se escribe
+    document.getElementById('cedula').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, ''); // Solo números
+      
+      if (value.length >= 3) {
+        value = value.substring(0, 3) + '-' + value.substring(3);
+      }
+      if (value.length >= 11) {
+        value = value.substring(0, 11) + '-' + value.substring(11, 12);
+      }
+      
+      e.target.value = value;
+    });
+
+    // Validar al presionar Enter
+    document.getElementById('cedula').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        validarCedula();
+      }
+    });
+
     async function validarCedula() {
       const cedula = document.getElementById('cedula').value;
       const resultado = document.getElementById('resultado');
+      const btnText = document.getElementById('btn-text');
+      const button = document.querySelector('.btn-validate');
+
+      // Limpiar resultado anterior
+      resultado.className = '';
+      resultado.style.display = 'none';
+
+      // Validación básica
+      if (!cedula.trim()) {
+        mostrarResultado('Por favor, ingrese un número de cédula.', 'error');
+        return;
+      }
+
+      // Mostrar loading
+      button.disabled = true;
+      btnText.innerHTML = '<span class="loading"></span>Validando...';
 
       try {
         const res = await fetch('/api/validar', {
@@ -25,12 +307,25 @@
         });
 
         const data = await res.json();
-        resultado.textContent = data.mensaje;
-        resultado.style.color = data.valido ? 'green' : 'red';
+        
+        if (data.valido) {
+          mostrarResultado(data.mensaje || '✓ Cédula válida', 'success');
+        } else {
+          mostrarResultado(data.mensaje || '✗ Cédula inválida', 'error');
+        }
       } catch (err) {
-        resultado.textContent = 'Error al validar.';
-        resultado.style.color = 'orange';
+        mostrarResultado('⚠ Error de conexión. Intente nuevamente.', 'warning');
+      } finally {
+        // Restaurar botón
+        button.disabled = false;
+        btnText.textContent = 'Validar Cédula';
       }
+    }
+
+    function mostrarResultado(mensaje, tipo) {
+      const resultado = document.getElementById('resultado');
+      resultado.textContent = mensaje;
+      resultado.className = `result-${tipo}`;
     }
   </script>
 </body>
